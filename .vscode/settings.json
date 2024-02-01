@@ -1,0 +1,9 @@
+{
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestArgs": [
+        // Add arguments here, for example, the directory where your tests are located:
+        "/Users/jay.dave/code/aws_cur_processor/tests"
+    ]
+}
