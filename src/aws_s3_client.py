@@ -16,9 +16,11 @@ class AwsS3Client:
             # Attempt to download the file
             self.s3.download_file(self.bucket_name, file_path, destination)
             self.logger.info(f'Successfully downloaded file: {file_path} from bucket: {self.bucket_name}')
-        except self.s3.exceptions.NoSuchKey:
-            # Log an error if the file does not exist
+        except self.s3.exceptions.NoSuchKey as e:
+            # Log an error if the file does not exist and re-raise the exception
             self.logger.error(f'File not found in bucket: {self.bucket_name}, file: {file_path}')
+            raise e
         except Exception as e:
-            # Log any other exceptions
+            # Log any other exceptions and re-raise
             self.logger.error(f'Error occurred while downloading file: {file_path} from bucket: {self.bucket_name}. Error: {str(e)}')
+            raise e

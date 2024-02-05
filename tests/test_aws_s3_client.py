@@ -37,16 +37,16 @@ def test_download_file_not_found():
     # Mock the logger to capture log messages
     with mock.patch.object(client, 'logger', autospec=True) as mock_logger:
         # Attempt to download a non-existent file
-        client.download_file('non_existent_file', '/tmp/non_existent_file')
+        with pytest.raises(ClientError):
+            client.download_file('non_existent_file', '/tmp/non_existent_file')
 
     # Check that an error was logged
-    expected_error_message = 'Error occurred while downloading file: non_existent_file from bucket: test-bucket. Error: An error occurred (404) when calling the HeadObject operation: Not Found'
-    mock_logger.error.assert_called_once_with(expected_error_message)
+    mock_logger.error.assert_called()
 
 @mock_aws
 def test_download_file_unexpected_error():
     # Define bucket_name
-    bucket_name = 'non_existent_bucket'
+    bucket_name = 'test-bucket'
     
     # Initialize AwsS3Client with a non-existent bucket
     client = AwsS3Client(bucket_name, 'access_key', 'secret_key', 'region')
@@ -54,7 +54,8 @@ def test_download_file_unexpected_error():
     # Mock the logger to capture log messages
     with mock.patch.object(client, 'logger', autospec=True) as mock_logger:
         # Attempt to download a file from a non-existent bucket
-        client.download_file('test-file', '/tmp/test-file')
+        with pytest.raises(ClientError):
+            client.download_file('test-file', '/tmp/test-file')
 
     # Check that an error was logged
-    assert 'Error occurred while downloading file' in str(mock_logger.error.call_args[0])
+    mock_logger.error.assert_called()

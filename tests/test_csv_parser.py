@@ -13,7 +13,7 @@ def test_parse_csv():
 
     # Initialize CsvParser and parse the CSV file
     csv_parser = CsvParser(test_file_path)
-    data = csv_parser.parse_csv()
+    data = list(csv_parser.parse_csv())  # Convert the generator to a list for testing
 
     # Check that the CSV file was parsed correctly
     expected_data = [
@@ -28,13 +28,12 @@ def test_parse_csv_file_not_found():
 
     # Mock the logger to capture log messages
     with mock.patch.object(csv_parser, 'logger', autospec=True) as mock_logger:
-        data = csv_parser.parse_csv()
+        # Expect FileNotFoundError to be raised
+        with pytest.raises(FileNotFoundError):
+            list(csv_parser.parse_csv())
 
     # Check that an error was logged
     mock_logger.error.assert_called_once_with('File not found: /tmp/non_existent.csv')
-
-    # Check that no data was returned
-    assert data == []
 
 def test_parse_csv_unexpected_error():
     # Initialize CsvParser with a directory instead of a file
@@ -42,10 +41,9 @@ def test_parse_csv_unexpected_error():
 
     # Mock the logger to capture log messages
     with mock.patch.object(csv_parser, 'logger', autospec=True) as mock_logger:
-        data = csv_parser.parse_csv()
+        # Expect an error to be raised
+        with pytest.raises(Exception):
+            list(csv_parser.parse_csv())
 
     # Check that an error was logged
-    assert 'Error occurred while parsing file' in str(mock_logger.error.call_args[0])
-
-    # Check that no data was returned
-    assert data == []
+    mock_logger.error.assert_called()

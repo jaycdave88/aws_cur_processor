@@ -33,7 +33,7 @@ from src.json_converter import JsonConverter
 ])
 def test_convert_to_json(test_data, expected_result):
     # Convert the data to JSON
-    json_data = JsonConverter.convert_to_json(test_data)
+    json_data = JsonConverter.convert_to_json(iter(test_data))
 
     # Check that the data was converted to JSON correctly
     assert json_data == expected_result

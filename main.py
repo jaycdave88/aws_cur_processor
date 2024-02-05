@@ -10,12 +10,12 @@ def main_function(bucket_name, s3_file_path, local_file_path, access_key, secret
 
     # Parse the downloaded CSV file
     csv_parser = CsvParser(local_file_path)
-    csv_data = csv_parser.parse_csv()
+    csv_data_generator = csv_parser.parse_csv()
 
     # Convert the CSV data to JSON
-    json_data = JsonConverter.convert_to_json(csv_data)
+    json_data = JsonConverter.convert_to_json(csv_data_generator)
 
-    # Output the JSON data to a file or print it
+    # Output the JSON data to a file
     with open('output.json', 'w') as json_file:
         json_file.write(json_data)
 
