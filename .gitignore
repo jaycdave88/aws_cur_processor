@@ -119,3 +119,6 @@ cython_debug/
 
 # Visual Studio Code settings
 .vscode/
+
+#bash files
+scripts/
