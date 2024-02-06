@@ -121,7 +121,7 @@ cython_debug/
 .vscode/
 
 #bash files
-scripts/
+*.sh
 
 #AWS CUR files
 aws-cur.csv

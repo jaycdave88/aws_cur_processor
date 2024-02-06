@@ -5,6 +5,9 @@ This project provides a set of tools to download, parse, and convert AWS Cost an
 ## Project Structure
 
 - `aws_cur_processor/`: Main package containing the source code.
+  - `scripts/`: Helper scripts
+    - `Terraform/`: Location for Terraform files
+      - `CUR_Dashboard.tf` : Creation of a pre-made AWS Cost and Utilization (CUR) dashboard 
   - `src/`: Source code directory for the project modules.
     - `aws_s3_client.py`: Module to handle AWS S3 interactions.
     - `csv_parser.py`: Module to parse CSV files.
@@ -72,6 +75,8 @@ When calling `main_function`, you need to provide the following parameters:
 - `access_key`: Your AWS access key ID.
 - `secret_key`: Your AWS secret access key.
 - `region`: The AWS region where the S3 bucket is located.
+
+Note: For local processing, only the `local_file_path` parameter is required. For S3 processing, `bucket_name`, `s3_file_path`, `access_key`, `secret_key`, and `region` are required.
 
 ## Contributing
 

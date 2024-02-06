@@ -10,34 +10,39 @@ class JsonConverter:
     @staticmethod
     def convert_to_json(data):
         try:
-            aggregated_data = {}
+            # Initialize the structure for aggregated data
+            aggregated_data = {
+                'TotalCost': 0.0,
+                'ServiceCosts': {},
+                'ServiceCount': 0,
+                'MonthlyCosts': {}
+            }
             for row in data:
                 # Extract relevant information
                 service = row.get('product/ProductName')
-                instance_type = row.get('lineItem/UsageType')
                 start_time_str = row.get('lineItem/UsageStartDate')
                 cost = float(row.get('lineItem/UnblendedCost', '0.0'))
 
-                # Parse the start time and extract the hour
+                # Parse the start time and extract the month
                 start_time = datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M:%SZ')
-                hour = start_time.strftime('%Y-%m-%d %H:00:00')
+                month = start_time.strftime('%Y-%m')
 
-                # Initialize nested dictionaries if necessary
-                if service not in aggregated_data:
-                    aggregated_data[service] = {}
-                if hour not in aggregated_data[service]:
-                    aggregated_data[service][hour] = {'cost': 0.0, 'instance_types': {}}
+                # Aggregate total cost
+                aggregated_data['TotalCost'] += cost
 
-                # Sum up the costs for each service per hour
-                aggregated_data[service][hour]['cost'] += cost
+                # Aggregate costs by service
+                if service not in aggregated_data['ServiceCosts']:
+                    aggregated_data['ServiceCosts'][service] = 0.0
+                    aggregated_data['ServiceCount'] += 1
+                aggregated_data['ServiceCosts'][service] += cost
 
-                # Track instance types and their costs
-                if instance_type not in aggregated_data[service][hour]['instance_types']:
-                    aggregated_data[service][hour]['instance_types'][instance_type] = 0.0
-                aggregated_data[service][hour]['instance_types'][instance_type] += cost
+                # Aggregate costs by month
+                if month not in aggregated_data['MonthlyCosts']:
+                    aggregated_data['MonthlyCosts'][month] = 0.0
+                aggregated_data['MonthlyCosts'][month] += cost
 
             # Check if data was aggregated
-            if not aggregated_data:
+            if not aggregated_data['ServiceCosts']:
                 logger.warning('No data was aggregated; the resulting JSON will be empty.')
 
             return json.dumps(aggregated_data, indent=4)

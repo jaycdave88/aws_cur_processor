@@ -4,6 +4,13 @@ import requests
 from src.csv_parser import CsvParser
 from src.json_converter import JsonConverter
 
+# # Locally test
+# file_path = '/Users/jay.dave/code/aws_cur_processor/aws-cur.csv'  # Update this path as needed
+# parser = CsvParser(file_path)
+# parsed_data = parser.parse_csv()
+# json_data = JsonConverter.convert_to_json(parsed_data)
+# print(json_data)
+
 def send_data_in_batches(json_data, endpoint, headers, batch_size=4000000):  # batch_size in bytes
     start = 0
     end = batch_size
@@ -27,7 +34,7 @@ def main_function(bucket_name, s3_file_path, local_file_path, access_key, secret
     # Send the JSON data to the endpoint in batches
     endpoint = "https://134414420961.collect.observeinc.com/v1/http"
     headers = {
-        "Authorization": "Bearer {PROVIDE_OWN_TOKEN}",
+        "Authorization": "Bearer {OBSERVE_BEARER_TOKEN}",
         "Content-type": "application/json"
     }
 
