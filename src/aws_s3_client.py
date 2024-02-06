@@ -2,9 +2,9 @@ import boto3
 import logging
 
 class AwsS3Client:
-    def __init__(self, bucket_name, access_key, secret_key, region):
-        # Initialize the S3 client with IAM credentials
-        self.s3 = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_key, region_name=region)
+    def __init__(self, bucket_name, region):
+        # Initialize the S3 client. boto3 will automatically use credentials from the environment.
+        self.s3 = boto3.client('s3', region_name=region)
         self.bucket_name = bucket_name
 
         # Set up logging
